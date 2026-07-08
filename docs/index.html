@@ -1,0 +1,494 @@
+ <!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Sociograma Transdisciplinar - Anderson Salazar</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --bg-0: #f7f9fc;
+    --bg-1: #eef2f7;
+    --ink-0: #111418;
+    --ink-1: #454d58;
+    --ink-2: #6a7585;
+    --line: #d7e0ea;
+
+    --ego: #f5b041;
+    --family: #e74c3c;
+    --work: #3498db;
+    --undergrad: #e84393;
+    --academic: #9b59b6;
+    --community: #2ecc71;
+    --hybrid: #1abc9c;
+
+    --panel-bg: rgba(255, 255, 255, 0.92);
+    --shadow-soft: 0 14px 40px rgba(17, 20, 24, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    background: radial-gradient(ellipse at 50% 50%, var(--bg-0) 0%, var(--bg-1) 100%);
+    overflow: hidden; font-family: 'Sora', sans-serif; color: var(--ink-0);
+  }
+  
+  #canvas-wrap { 
+    position: absolute; inset: 0; cursor: grab; 
+  }
+  #canvas-wrap::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(135deg, rgba(245,176,65,0.08), transparent 35%),
+      radial-gradient(circle at top left, rgba(52,152,219,0.06), transparent 32%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  #canvas-wrap.dragging { cursor: grabbing; }
+  canvas { display: block; }
+  
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  /* Encabezado Académico */
+  #academic-header {
+    position: absolute; top: 22px; left: 28px; z-index: 5;
+    background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(247,249,252,0.94));
+    border: 1px solid rgba(215,224,234,0.95);
+    border-radius: 16px; padding: 18px 24px; box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(12px); max-width: 440px; pointer-events: none;
+  }
+  #academic-header h1 { font-size: 16px; margin: 0 0 4px 0; letter-spacing: -0.01em; }
+  #academic-header h2 { font-size: 12px; margin: 0 0 12px 0; color: var(--ink-1); font-weight: 600; }
+  #academic-header .details { font-size: 10.5px; color: var(--ink-2); line-height: 1.55; }
+  #academic-header .details strong { color: var(--ink-1); font-weight: 700; }
+  #academic-header .date { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: 10px; font-weight: 700; color: var(--ink-1); letter-spacing: 0.08em; }
+
+  /* Párrafo de Síntesis */
+  #reflection-box {
+    position: absolute; bottom: 28px; right: 28px; z-index: 5;
+    background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(247,249,252,0.95));
+    border: 1px solid rgba(215,224,234,0.95);
+    border-left: 4px solid var(--ego); border-radius: 16px; padding: 18px 24px;
+    box-shadow: var(--shadow-soft); backdrop-filter: blur(10px);
+    width: 430px; max-width: 90vw; pointer-events: none;
+  }
+  #reflection-box h3 { margin: 0 0 8px 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ego); font-weight: 700; }
+  #reflection-box p { margin: 0; font-size: 11.5px; color: var(--ink-1); line-height: 1.65; text-align: justify; }
+
+  /* Legend */
+  #legend {
+    position: absolute; bottom: 28px; left: 28px; z-index: 5;
+    background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(247,249,252,0.95));
+    border: 1px solid rgba(215,224,234,0.95); border-radius: 14px;
+    padding: 14px 18px; backdrop-filter: blur(10px);
+    font-size: 11px; letter-spacing: 0.02em; color: var(--ink-1); pointer-events: none;
+    box-shadow: var(--shadow-soft);
+  }
+  #legend .row { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+  #legend .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; box-shadow: inset 0 0 2px rgba(0,0,0,0.2); }
+  #legend .row b { color: var(--ink-0); font-weight: 700; }
+  #legend .note { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 10px; color: var(--ink-2); max-width: 290px; line-height: 1.55; }
+
+  /* Info panel */
+  #panel {
+    position: absolute; top: 0; right: 0; height: 100%; width: 340px; max-width: 88vw;
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(247,249,252,0.96));
+    border-left: 1px solid rgba(215,224,234,0.95); backdrop-filter: blur(14px);
+    transform: translateX(100%); transition: transform 0.45s cubic-bezier(.16,.84,.44,1);
+    z-index: 10; display: flex; flex-direction: column; padding: 26px; box-shadow: -12px 0 30px rgba(17,20,24,0.06);
+  }
+  #panel.open { transform: translateX(0); }
+  #panel .close { position: absolute; top: 20px; right: 22px; background: none; border: none; color: var(--ink-2); font-size: 20px; cursor: pointer; transition: color .15s; }
+  #panel .close:hover { color: var(--ink-0); }
+  #panel .eyebrow { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 6px; }
+  #panel .swatch { width: 44px; height: 44px; border-radius: 50%; margin-bottom: 16px; border: 2px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+  #panel h1 { margin: 0 0 4px; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+  #panel .tagline { font-size: 12.5px; color: var(--ink-1); margin-bottom: 22px; line-height: 1.5; }
+
+  .stat-row { display: flex; justify-content: space-between; align-items: baseline; padding: 9px 0; border-top: 1px dashed var(--line); }
+  .stat-row .k { font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); }
+  .stat-row .v { font-size: 12px; color: var(--ink-0); text-align: right; font-weight: 500; }
+
+  @media (max-width: 850px) {
+    #academic-header { max-width: calc(100vw - 32px); top: 16px; left: 16px; right: 16px; }
+    #reflection-box { position: relative; width: calc(100vw - 32px); bottom: auto; right: auto; margin: 16px; margin-top: 220px;}
+    #legend { position: relative; bottom: auto; left: auto; margin: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="canvas-wrap"></div>
+
+<div id="academic-header">
+  <h1>Anderson Ariel Salazar Salazar</h1>
+  <h2>Maestría en Educación Virtual e-MEV</h2>
+  <div class="details">
+    <strong>Facultad:</strong> Educación, Universidad de Nariño<br>
+    <strong>Módulo 1:</strong> Umbral cartográfico cognitivo y etnografía comunicativa<br>
+    <strong>Pista 2:</strong> El Pensar Transdiciplinar<br><br>
+    <strong>Titular:</strong> MG. GUILLERMO OBANDO NAVARRO<br>
+    <strong>Asistente:</strong> Mtrda. MARÍA ISABEL GÓYES ROSERO
+  </div>
+  <div class="date mono">8 DE JULIO DE 2026</div>
+</div>
+
+<div id="legend">
+  <div class="row"><span class="dot" style="background:var(--ego)"></span><b>Ego</b> — Tú</div>
+  <div class="row"><span class="dot" style="background:var(--family)"></span><b>Familiar</b> (6 cercanos, 70 lejanos)</div>
+  <div class="row"><span class="dot" style="background:var(--undergrad)"></span><b>Pregrado</b> (Licenciatura en Informática)</div>
+  <div class="row"><span class="dot" style="background:var(--work)"></span><b>Laboral</b> (Universida de Nariño Sede Regional Túquerres)</div>
+  <div class="row"><span class="dot" style="background:var(--academic)"></span><b>Posgrado</b> (Maestría e-MEV)</div>
+  <div class="row"><span class="dot" style="background:var(--community)"></span><b>Comunidad</b> (Santander de Valencia)</div>
+  <div class="note"><b>Nota Metodológica:</b> Los grupos masivos (~700 estudiantes y habitantes) se visualizan a escala representativa.<br><br><b>Interacción:</b> Clic y arrastrar para rotar. Rueda para zoom. Clic en nodos para inspeccionar.</div>
+</div>
+
+<div id="reflection-box">
+  <h3>Impacto Transdisciplinar de las Redes</h3>
+  <p>
+    Bajo la óptica del pensar transdisciplinar, mis redes sociales no operan como compartimentos aislados, sino como un tejido continuo e hiperconectado. La virtualidad y la presencialidad se entrelazan constantemente, desdibujando fronteras: compañeros de trabajo de la Sede Regional Túquerres se convierten en amistades, y estudiantes habitan simultáneamente el rol de vecinos en Santander de Valencia. Mis amistades de la Licenciatura en Informática siguen siendo pilares fundamentales. El intercambio de información fluye entre estos nodos híbridos, permitiendo que perspectivas de la maestría e-MEV impacten mi entorno local, demostrando que el conocimiento y las relaciones humanas trascienden las categorías rígidas.
+  </p>
+</div>
+
+<div id="panel">
+  <button class="close" id="panel-close">✕</button>
+  <div class="eyebrow mono" id="p-eyebrow">NODO</div>
+  <div class="swatch" id="p-swatch"></div>
+  <h1 id="p-name">Nombre</h1>
+  <div class="tagline" id="p-tagline">—</div>
+  <div class="stat-scan mono">
+    <div class="stat-row"><span class="k">Origen</span><span class="v" id="p-origen">—</span></div>
+    <div class="stat-row"><span class="k">Vínculos Múltiples</span><span class="v" id="p-multi">—</span></div>
+    <div class="stat-row" style="border-bottom: 1px dashed var(--line);"><span class="k">Entorno Principal</span><span class="v" id="p-env">—</span></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const COLORS = {
+    ego: 0xf5b041,
+    family: 0xe74c3c,
+    work: 0x3498db,
+    undergrad: 0xe84393, // Rosa/Magenta para Licenciatura
+    academic: 0x9b59b6,
+    community: 0x2ecc71,
+    hybrid: 0x1abc9c
+  };
+
+  const wrap = document.getElementById('canvas-wrap');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, wrap.clientWidth/wrap.clientHeight, 0.1, 2000);
+  camera.position.set(0, 0, 160); 
+  
+  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+  wrap.appendChild(renderer.domElement);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+  dirLight.position.set(20, 40, 20);
+  scene.add(dirLight);
+
+  // --- ESTRUCTURA DE LA RED ---
+  const nodesData = [];
+  const linksData = [];
+
+  // Ego (Centro)
+  nodesData.push({ id: 0, name: 'Tú (Ego)', origen: 'Centro', multi: 'Conecta todos los mundos', env: 'Híbrido', color: COLORS.ego, size: 4, mass: 15, fixed: true, x:0, y:0, z:0 });
+
+  let idCounter = 1;
+  
+  function addGroup(count, origen, colorHex, size, mass, env, egoDist, egoStr, groupDist, groupStr, density) {
+    const startId = idCounter;
+    for(let i=0; i<count; i++){
+      nodesData.push({
+        id: idCounter++, name: `${origen} ${i+1}`, origen: origen, multi: 'Vínculo directo', env: env,
+        color: colorHex, size: size, mass: mass,
+        x: (Math.random()-0.5)*80, y: (Math.random()-0.5)*80, z: (Math.random()-0.5)*80,
+        vx: 0, vy: 0, vz: 0
+      });
+      linksData.push({ source: 0, target: idCounter-1, strength: egoStr, distance: Math.random()*10 + egoDist });
+    }
+    for(let i=0; i<count*density; i++) {
+      let a = startId + Math.floor(Math.random()*count);
+      let b = startId + Math.floor(Math.random()*count);
+      if(a!==b) linksData.push({ source: a, target: b, strength: groupStr, distance: groupDist });
+    }
+    return { start: startId, end: idCounter-1 };
+  }
+
+  // 1. Familia
+  const famCercanaPeople = [
+    { name: 'Papá Norberto', multi: 'Padre y referente cercano' },
+    { name: 'Mamá', multi: 'Madre y apoyo emocional' },
+    { name: 'Rosa María', multi: 'Familiar cercana' },
+    { name: 'Hermano Alejandro', multi: 'Hermano cercano' },
+    { name: 'Hermano Camilo', multi: 'Hermano cercano' },
+    { name: 'Hermana Andrea', multi: 'Hermana cercana' }
+  ];
+  const famCercanaIds = [];
+  famCercanaPeople.forEach(person => {
+    nodesData.push({
+      id: idCounter++, name: person.name, origen: 'Familia Cercana', multi: person.multi, env: 'Físico / Presencial',
+      color: COLORS.family, size: 1.6, mass: 2,
+      x: (Math.random()-0.5)*20, y: (Math.random()-0.5)*20, z: (Math.random()-0.5)*20, vx: 0, vy: 0, vz: 0
+    });
+    linksData.push({ source: 0, target: idCounter-1, strength: 0.8, distance: 6 });
+    famCercanaIds.push(idCounter - 1);
+  });
+  for(let i=0; i<famCercanaIds.length; i++){
+    for(let j=i+1; j<famCercanaIds.length; j++){
+      linksData.push({ source: famCercanaIds[i], target: famCercanaIds[j], strength: 0.4, distance: 5 });
+    }
+  }
+  const famCercana = { start: famCercanaIds[0], end: famCercanaIds[famCercanaIds.length - 1] };
+  const famLejana = addGroup(70, 'Familia Lejana', COLORS.family, 0.8, 1, 'Físico / Presencial', 18, 0.1, 10, 0.2, 1.5);
+  for(let i=0; i<30; i++){
+    let fL = famLejana.start + Math.floor(Math.random()*(famLejana.end - famLejana.start));
+    let fC = famCercana.start + Math.floor(Math.random()*(famCercana.end - famCercana.start));
+    linksData.push({ source: fL, target: fC, strength: 0.3, distance: 8 });
+  }
+
+  // 2. Pregrado (Amigos específicos y grupo general)
+  const undergradFriends = ['Ginna', 'Germán', 'Julihet', 'Jonathan', 'Alejandra', 'Brandon'];
+  const startUId = idCounter;
+  undergradFriends.forEach(name => {
+    nodesData.push({
+      id: idCounter++, name: name, origen: 'Licenciatura en Informática', multi: 'Amistad estrecha de la carrera', env: 'Híbrido', 
+      color: COLORS.undergrad, size: 1.6, mass: 1.8,
+      x: (Math.random()-0.5)*20, y: (Math.random()-0.5)*20, z: (Math.random()-0.5)*20, vx: 0, vy: 0, vz: 0
+    });
+    // Vínculo fortísimo con Ego
+    linksData.push({ source: 0, target: idCounter-1, strength: 0.7, distance: 7 });
+  });
+  // Vínculos entre ellos (grupo unido)
+  for(let i=0; i<undergradFriends.length; i++){
+    for(let j=i+1; j<undergradFriends.length; j++){
+      linksData.push({ source: startUId+i, target: startUId+j, strength: 0.5, distance: 6 });
+    }
+  }
+  // Resto de compañeros de la carrera (genéricos)
+  const undergradGen = addGroup(12, 'Compañero Licenciatura', COLORS.undergrad, 0.9, 1.1, 'Híbrido', 16, 0.2, 9, 0.2, 2);
+  // Conectar genéricos con los amigos cercanos
+  for(let i=0; i<15; i++){
+    let specific = startUId + Math.floor(Math.random()*undergradFriends.length);
+    let generic = undergradGen.start + Math.floor(Math.random()*(undergradGen.end - undergradGen.start));
+    linksData.push({ source: specific, target: generic, strength: 0.25, distance: 10 });
+  }
+
+  // 3. Laboral (Túquerres)
+  const workCloseFriends = [
+    { name: 'Valeria', multi: 'Amistad cercana del trabajo' },
+    { name: 'Nohora', multi: 'Amistad cercana del trabajo' }
+  ];
+  const workCloseFriendIds = [];
+  workCloseFriends.forEach(person => {
+    nodesData.push({
+      id: idCounter++, name: person.name, origen: 'Trabajo', multi: person.multi, env: 'Híbrido',
+      color: COLORS.hybrid, size: 1.7, mass: 1.6,
+      x: (Math.random()-0.5)*20, y: (Math.random()-0.5)*20, z: (Math.random()-0.5)*20, vx: 0, vy: 0, vz: 0
+    });
+    linksData.push({ source: 0, target: idCounter-1, strength: 0.85, distance: 7 });
+    workCloseFriendIds.push(idCounter - 1);
+  });
+  for(let i=0; i<workCloseFriendIds.length; i++){
+    for(let j=i+1; j<workCloseFriendIds.length; j++){
+      linksData.push({ source: workCloseFriendIds[i], target: workCloseFriendIds[j], strength: 0.45, distance: 5 });
+    }
+  }
+  const workColegas = addGroup(20, 'Compañero Sede Túquerres', COLORS.work, 1.2, 1.5, 'Híbrido', 14, 0.35, 8, 0.3, 2.5);
+  const workEstudiantes = addGroup(100, 'Estudiante Sede Túquerres', COLORS.work, 0.5, 0.8, 'Físico / Presencial', 35, 0.05, 12, 0.1, 1);
+  for(let i=0; i<60; i++){
+    let est = workEstudiantes.start + Math.floor(Math.random()*(workEstudiantes.end - workEstudiantes.start));
+    let col = workColegas.start + Math.floor(Math.random()*(workColegas.end - workColegas.start));
+    linksData.push({ source: est, target: col, strength: 0.15, distance: 12 });
+  }
+
+  // 4. Académico (e-MEV) y Comunidad (Santander de Valencia)
+  const acaGroup = addGroup(15, 'Compañero Maestría e-MEV', COLORS.academic, 1, 1, 'Virtual', 22, 0.15, 12, 0.15, 2);
+  const comGroup = addGroup(100, 'Habitante Santander de Valencia', COLORS.community, 0.4, 0.7, 'Físico / Presencial', 45, 0.03, 14, 0.08, 1.2);
+
+
+  // --- NODOS PUENTE (Transdisciplinariedad) ---
+  function createCrossLink(idA, idB, description, strength=0.1, dist=15) {
+    linksData.push({ source: idA, target: idB, strength: strength, distance: dist });
+    nodesData[idA].multi = description;
+    nodesData[idB].multi = description;
+  }
+
+  // Estudiantes que son de Santander de Valencia (Vecinos)
+  for(let i=0; i<15; i++) {
+    let studentId = workEstudiantes.start + Math.floor(Math.random()*(workEstudiantes.end - workEstudiantes.start));
+    let neighborId = comGroup.start + Math.floor(Math.random()*(comGroup.end - comGroup.start));
+    createCrossLink(studentId, neighborId, "Estudiante Túquerres y Vecino Santander de Valencia", 0.4, 8);
+    nodesData[studentId].color = COLORS.hybrid;
+    nodesData[studentId].size = 0.9;
+  }
+
+  // Colegas de Túquerres que son amigos cercanos
+  for(let i=0; i<4; i++) {
+    let coworkerId = workColegas.start + Math.floor(Math.random()*(workColegas.end - workColegas.start));
+    linksData.push({ source: 0, target: coworkerId, strength: 0.8, distance: 7 }); 
+    nodesData[coworkerId].name = "Colega Sede Túquerres → Amistad";
+    nodesData[coworkerId].multi = "Trascendió lo laboral a la amistad";
+    nodesData[coworkerId].color = COLORS.hybrid;
+    nodesData[coworkerId].size = 1.5;
+  }
+
+  // Familia lejana interconectada con la comunidad de Santander
+  for(let i=0; i<10; i++) {
+    let famId = famLejana.start + Math.floor(Math.random()*(famLejana.end - famLejana.start));
+    let comId = comGroup.start + Math.floor(Math.random()*(comGroup.end - comGroup.start));
+    createCrossLink(famId, comId, "Familia extendida que vive en el pueblo", 0.2, 15);
+  }
+
+  // --- RENDERIZACIÓN 3D ---
+  const meshes = [];
+  const nodeMaterial = new THREE.MeshStandardMaterial({ roughness: 0.3, metalness: 0.1 });
+  const sphereGeo = new THREE.SphereGeometry(1, 16, 16);
+
+  nodesData.forEach(n => {
+    const mat = nodeMaterial.clone();
+    mat.color.setHex(n.color);
+    const mesh = new THREE.Mesh(sphereGeo, mat);
+    mesh.scale.setScalar(n.size);
+    mesh.userData = n;
+    scene.add(mesh);
+    meshes.push(mesh);
+  });
+
+  const lineMat = new THREE.LineBasicMaterial({ color: 0x9ca3af, transparent: true, opacity: 0.15 });
+  const lineGeo = new THREE.BufferGeometry();
+  const linePos = new Float32Array(linksData.length * 6);
+  lineGeo.setAttribute('position', new THREE.BufferAttribute(linePos, 3));
+  const lineMesh = new THREE.LineSegments(lineGeo, lineMat);
+  scene.add(lineMesh);
+
+  // --- MOTOR FÍSICO (Solo pre-cálculo) ---
+  function updatePhysics() {
+    const k = 150; 
+    const damping = 0.75; 
+    const centerGravity = 0.005;
+
+    for(let i=0; i<nodesData.length; i++) {
+      for(let j=i+1; j<nodesData.length; j++) {
+        let n1 = nodesData[i], n2 = nodesData[j];
+        if(n1.fixed && n2.fixed) continue;
+        let dx = n1.x - n2.x, dy = n1.y - n2.y, dz = n1.z - n2.z;
+        let distSq = dx*dx + dy*dy + dz*dz;
+        if(distSq < 0.1) distSq = 0.1;
+        if(distSq > 1000) continue; 
+        
+        let force = k / distSq;
+        let dist = Math.sqrt(distSq);
+        let fx = (dx/dist) * force, fy = (dy/dist) * force, fz = (dz/dist) * force;
+
+        if(!n1.fixed) { n1.vx += fx / n1.mass; n1.vy += fy / n1.mass; n1.vz += fz / n1.mass; }
+        if(!n2.fixed) { n2.vx -= fx / n2.mass; n2.vy -= fy / n2.mass; n2.vz -= fz / n2.mass; }
+      }
+    }
+
+    for(let link of linksData) {
+      let n1 = nodesData[link.source], n2 = nodesData[link.target];
+      let dx = n2.x - n1.x, dy = n2.y - n1.y, dz = n2.z - n1.z;
+      let dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+      let force = (dist - link.distance) * link.strength;
+      let fx = (dx/dist) * force, fy = (dy/dist) * force, fz = (dz/dist) * force;
+
+      if(!n1.fixed) { n1.vx += fx / n1.mass; n1.vy += fy / n1.mass; n1.vz += fz / n1.mass; }
+      if(!n2.fixed) { n2.vx -= fx / n2.mass; n2.vy -= fy / n2.mass; n2.vz -= fz / n2.mass; }
+    }
+
+    let lineIdx = 0;
+    const positions = lineGeo.attributes.position.array;
+
+    for(let i=0; i<nodesData.length; i++) {
+      let n = nodesData[i];
+      if(!n.fixed) {
+        n.vx -= n.x * centerGravity; n.vy -= n.y * centerGravity; n.vz -= n.z * centerGravity;
+        n.vx *= damping; n.vy *= damping; n.vz *= damping;
+        n.x += n.vx; n.y += n.vy; n.z += n.vz;
+      }
+      meshes[i].position.set(n.x, n.y, n.z);
+    }
+
+    for(let link of linksData) {
+      let n1 = nodesData[link.source], n2 = nodesData[link.target];
+      positions[lineIdx++] = n1.x; positions[lineIdx++] = n1.y; positions[lineIdx++] = n1.z;
+      positions[lineIdx++] = n2.x; positions[lineIdx++] = n2.y; positions[lineIdx++] = n2.z;
+    }
+    lineGeo.attributes.position.needsUpdate = true;
+  }
+
+  // Pre-cálculo de ciclos
+  for (let i = 0; i < 400; i++) {
+    updatePhysics();
+  }
+
+  // --- CONTROLES E INTERACCIÓN ---
+  let isDragging = false, lastX=0, lastY=0;
+  const pivot = new THREE.Object3D();
+  meshes.forEach(m => pivot.add(m));
+  pivot.add(lineMesh);
+  scene.add(pivot);
+
+  wrap.addEventListener('mousedown', e=>{ isDragging=true; wrap.classList.add('dragging'); lastX=e.clientX; lastY=e.clientY; });
+  window.addEventListener('mouseup', ()=>{ isDragging=false; wrap.classList.remove('dragging'); });
+  window.addEventListener('mousemove', e=>{
+    if(!isDragging) return;
+    const dx = e.clientX - lastX, dy = e.clientY - lastY;
+    lastX = e.clientX; lastY = e.clientY;
+    pivot.rotation.y += dx * 0.005;
+    pivot.rotation.x += dy * 0.005;
+  });
+  wrap.addEventListener('wheel', e=>{
+    e.preventDefault();
+    camera.position.z = Math.max(50, Math.min(300, camera.position.z + e.deltaY * 0.15));
+  }, {passive:false});
+
+  const raycaster = new THREE.Raycaster();
+  const mouseVec = new THREE.Vector2();
+  const panel = document.getElementById('panel');
+
+  wrap.addEventListener('click', e => {
+    if(isDragging) return; 
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouseVec.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouseVec.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouseVec, camera);
+
+    const hits = raycaster.intersectObjects(meshes);
+    if(hits.length > 0) {
+      const data = hits[0].object.userData;
+      document.getElementById('p-swatch').style.background = '#' + data.color.toString(16).padStart(6,'0');
+      document.getElementById('p-swatch').style.borderColor = '#' + data.color.toString(16).padStart(6,'0');
+      document.getElementById('p-name').textContent = data.name;
+      document.getElementById('p-origen').textContent = data.origen;
+      document.getElementById('p-multi').textContent = data.multi;
+      document.getElementById('p-env').textContent = data.env;
+      panel.classList.add('open');
+    }
+  });
+
+  document.getElementById('panel-close').addEventListener('click', ()=> panel.classList.remove('open'));
+
+  // --- BUCLE DE RENDERIZADO (Sin físicas en tiempo real) ---
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', ()=>{
+    camera.aspect = wrap.clientWidth / wrap.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+  });
+
+})();
+</script>
+</body>
+</html>
