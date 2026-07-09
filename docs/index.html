@@ -16,11 +16,11 @@
 
     --ego: #f5b041;
     --family: #e74c3c;
-    --work: #3498db;
     --undergrad: #e84393;
-    --academic: #9b59b6;
     --community: #2ecc71;
-    --hybrid: #1abc9c;
+    --distant: #1abc9c; /* Grupo 4: Extendidos, Amistades, Internet */
+    --work: #3498db;
+    --academic: #9b59b6;
 
     --panel-bg: rgba(255, 255, 255, 0.92);
     --shadow-soft: 0 14px 40px rgba(17, 20, 24, 0.08);
@@ -71,11 +71,11 @@
     border: 1px solid rgba(215,224,234,0.95);
     border-left: 4px solid var(--ego); border-radius: 16px; padding: 18px 24px;
     box-shadow: var(--shadow-soft); backdrop-filter: blur(10px);
-    width: 430px; max-width: 90vw; pointer-events: none;
+    width: 440px; max-width: 90vw; pointer-events: none;
   }
   #reflection-box h3 { margin: 0 0 8px 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ego); font-weight: 700; }
-  #reflection-box p { margin: 0; font-size: 11.5px; color: var(--ink-1); line-height: 1.65; text-align: justify; }
-  #reflection-box ul { margin: 0; font-size: 11.5px; color: var(--ink-1); line-height: 1.65; text-align: justify; }
+  #reflection-box p { margin: 0; font-size: 11px; color: var(--ink-1); line-height: 1.6; text-align: justify; }
+  #reflection-box ul { margin: 0; font-size: 11px; color: var(--ink-1); line-height: 1.6; text-align: justify; padding-left: 20px; }
 
   /* Legend */
   #legend {
@@ -132,40 +132,35 @@
     <strong>Titular:</strong> MG. Guillermo Obando Navarro<br>
     <strong>Asistente:</strong> Mtrda. María Isabel Góyes Rosero
   </div>
-  <div class="date mono">8 DE JULIO DE 2026</div>
+  <div class="date mono">9 DE JULIO DE 2026</div>
 </div>
 
 <div id="legend">
-  <div class="row"><span class="dot" style="background:var(--ego)"></span><b>Ego</b> — Yo</div>
-  <div class="row"><span class="dot" style="background:var(--family)"></span><b>Familiar</b> (6 cercanos)</div>
-  <div class="row"><span class="dot" style="background:var(--undergrad)"></span><b>Pregrado</b> (Licenciatura en Informática)</div>
-  <div class="row"><span class="dot" style="background:var(--work)"></span><b>Laboral</b> (Universida de Nariño Sede Regional Túquerres)</div>
-  <div class="row"><span class="dot" style="background:var(--academic)"></span><b>Posgrado</b> (Maestría e-MEV)</div>
-  <div class="row"><span class="dot" style="background:var(--community)"></span><b>Comunidad</b> (Santander de Valencia),Personas con quienes interactúo en internet.</div>
-  <div class="note"><b>Nota Metodológica:</b> Los grupos masivos (~700 estudiantes y habitantes) se visualizan a escala representativa.<br><br><b>Interacción:</b> Clic y arrastrar para rotar. Rueda para zoom. Clic en nodos para inspeccionar.</div>
+  <div class="row"><span class="dot" style="background:var(--ego)"></span><b>Ego</b> (Yo)</div>
+  <div class="row"><span class="dot" style="background:var(--family)"></span><b>Familiar</b> (Nuclear, 13 Tíos, 19 Primos)</div>
+  <div class="row"><span class="dot" style="background:var(--undergrad)"></span><b>Pregrado</b> (Amigos, docentes, admin, apoyo)</div>
+  <div class="row"><span class="dot" style="background:var(--community)"></span><b>Comunidad</b> (Santander de Valencia: Vecinos)</div>
+  <div class="row"><span class="dot" style="background:var(--distant)"></span><b>Lazos Débiles</b> (Familiares Extendidos, Amistades, Internet)</div>
+  <div class="row"><span class="dot" style="background:var(--work)"></span><b>Laboral</b> (UniNariño Túquerres)</div>
+  <div class="row"><span class="dot" style="background:var(--academic)"></span><b>Maestría</b> (e-MEV)</div>
+  <div class="note"><b>Nota Metodológica:</b> Los grupos se visualizan a escala representativa.<br><br><b>Interacción:</b> Clic y arrastrar para rotar. Rueda para zoom. Clic en nodos para inspeccionar.</div>
 </div>
 
 <div id="reflection-box">
   <h3>Mi red de crecimiento</h3>
  <p>
-    Las personas a mi alrededor han formado redes de diversas maneras; algunas con conexiones más cercanas (lazos fuertes) y otras más distantes (lazos débiles), tal como lo describe el Análisis de Redes Sociales. He determinado un nodo central (yo como ego) y seis nodos interconectados:
+    Las personas a mi alrededor han formado redes de diversas maneras; con conexiones cercanas (lazos fuertes) y otras más distantes (lazos débiles), determinando un nodo central (yo como ego) y seis redes interconectadas:
 </p>
-
 <ul>
-    <li>Mi familia nuclear</li>
-    <li>Amigos de pregrado, compañeros y docentes y demás personal de la Universidad</li>
-    <li>Comunidad cercana (Santander de valencia)</li>
-    <li>Personas conocidas y no conocidas con quienes interactúo en internet, familia extendida.</li>
-    <li>Compañeros, docentes, personal administrativo y de apoyo de la Maestría en Educación Virtual (M-ev)</li>
-    <li>Compañeros, docentes y estudiantes de la Sede Regional Túquerres.</li>
+    <li><b>Familiar:</b> nuclear (Papá Norberto, Mamá Rosa María, hermanos Camilo, Alejandro y Andrea), tíos (13) y primos (19).</li>
+    <li><b>Pregrado:</b> amigos cercanos (Ginna, Jonathan, Brandon, Julihet, Alejandra, Germán), docentes, personal administrativo, compañeros, personal de apoyo.</li>
+    <li><b>Santander de Valencia:</b> mi comunidad (vecinos).</li>
+    <li><b>Lazos Débiles (Menor interacción):</b> familiares extendidos paternos, familiares extendidos maternos, amistades, personas en internet.</li>
+    <li><b>Trabajo (Sede Túquerres):</b> compañeros, estudiantes, docentes, colaboradores administrativos.</li>
+    <li><b>Maestría (e-MEV):</b> compañeros de cohorte, docentes, personal de apoyo, administrativos.</li>
 </ul>
-
 <p>
-    Estas redes no solo son grupos, sino estructuras dinámicas que han influenciado mi forma de ser, mis creencias y mi percepción del mundo. Mi gusto por la danza y el arte, herencia de mi familia, ejemplifica cómo estas redes transmiten sentido y pautas culturales.
-</p>
-
-<p>
-    Según Niklas Luhmann, la sociedad es un sistema de comunicaciones donde los individuos operan dentro de redes que, más allá de la simple interacción, configuran nuestra realidad. En este sentido, incluso los vínculos con personas desconocidas resultan decisivos; como plantea la teoría de la fuerza de los lazos débiles de Mark Granovetter, son precisamente estos lazos los que conectan mundos diferentes y son fundamentales para el desarrollo personal y la apertura a nuevas oportunidades.
+    Según Niklas Luhmann, la sociedad es un sistema de comunicaciones. En este sentido, la teoría de la fuerza de los lazos débiles de Mark Granovetter explica cómo estos lazos menos frecuentes conectan mundos diferentes y son fundamentales para el desarrollo personal.
 </p>
 </div>
 
@@ -176,9 +171,9 @@
   <h1 id="p-name">Nombre</h1>
   <div class="tagline" id="p-tagline">—</div>
   <div class="stat-scan mono">
-    <div class="stat-row"><span class="k">Origen</span><span class="v" id="p-origen">—</span></div>
-    <div class="stat-row"><span class="k">Vínculos Múltiples</span><span class="v" id="p-multi">—</span></div>
-    <div class="stat-row" style="border-bottom: 1px dashed var(--line);"><span class="k">Entorno Principal</span><span class="v" id="p-env">—</span></div>
+    <div class="stat-row"><span class="k">Grupo</span><span class="v" id="p-origen">—</span></div>
+    <div class="stat-row"><span class="k">Descripción</span><span class="v" id="p-multi">—</span></div>
+    <div class="stat-row" style="border-bottom: 1px dashed var(--line);"><span class="k">Entorno</span><span class="v" id="p-env">—</span></div>
   </div>
 </div>
 
@@ -188,11 +183,11 @@
   const COLORS = {
     ego: 0xf5b041,
     family: 0xe74c3c,
-    work: 0x3498db,
-    undergrad: 0xe84393, // Rosa/Magenta para Licenciatura
-    academic: 0x9b59b6,
+    undergrad: 0xe84393,
     community: 0x2ecc71,
-    hybrid: 0x1abc9c
+    distant: 0x1abc9c, 
+    work: 0x3498db,
+    academic: 0x9b59b6
   };
 
   const wrap = document.getElementById('canvas-wrap');
@@ -213,17 +208,17 @@
   // --- ESTRUCTURA DE LA RED ---
   const nodesData = [];
   const linksData = [];
+  let idCounter = 0;
 
-  // Ego (Centro)
-  nodesData.push({ id: 0, name: 'Anderson (Ego)', origen: 'Centro', multi: 'Conecta todos los mundos', env: 'Híbrido', color: COLORS.ego, size: 4, mass: 15, fixed: true, x:0, y:0, z:0 });
-
-  let idCounter = 1;
+  // 0. EGO
+  nodesData.push({ id: idCounter++, name: 'Anderson (Ego)', origen: 'Centro', multi: 'Conecta todos los mundos', env: 'Híbrido', color: COLORS.ego, size: 4, mass: 15, fixed: true, x:0, y:0, z:0 });
   
-  function addGroup(count, origen, colorHex, size, mass, env, egoDist, egoStr, groupDist, groupStr, density) {
+  function addGroup(count, origen, colorHex, size, mass, env, egoDist, egoStr, groupDist, groupStr, density, prefixName = "") {
     const startId = idCounter;
     for(let i=0; i<count; i++){
+      let nodeName = prefixName ? `${prefixName} ${i+1}` : `${origen} ${i+1}`;
       nodesData.push({
-        id: idCounter++, name: `${origen} ${i+1}`, origen: origen, multi: 'Vínculo directo', env: env,
+        id: idCounter++, name: nodeName, origen: origen, multi: 'Vínculo directo', env: env,
         color: colorHex, size: size, mass: mass,
         x: (Math.random()-0.5)*80, y: (Math.random()-0.5)*80, z: (Math.random()-0.5)*80,
         vx: 0, vy: 0, vz: 0
@@ -238,129 +233,72 @@
     return { start: startId, end: idCounter-1 };
   }
 
-  // 1. Familia
-  const famCercanaPeople = [
-    { name: 'Papá Norberto', multi: 'Padre y referente cercano' },
-    { name: 'Mamá Rosa María', multi: 'Familiar cercana' },
-    { name: 'Hermano Alejandro', multi: 'Hermano cercano' },
-    { name: 'Hermano Camilo', multi: 'Hermano cercano' },
-    { name: 'Hermana Andrea', multi: 'Hermana cercana' }
-  ];
-  const famCercanaIds = [];
-  famCercanaPeople.forEach(person => {
+  // GRUPO 1: FAMILIAR (Nuclear + Tíos + Primos)
+  const famNombres = ['Papá Norberto', 'Mamá Rosa María', 'Hermano Camilo', 'Hermano Alejandro', 'Hermana Andrea'];
+  const famIds = [];
+  famNombres.forEach(name => {
     nodesData.push({
-      id: idCounter++, name: person.name, origen: 'Familia Cercana', multi: person.multi, env: 'Físico / Presencial',
-      color: COLORS.family, size: 1.6, mass: 2,
+      id: idCounter++, name: name, origen: 'Familiar', multi: 'Familia Nuclear', env: 'Presencial', color: COLORS.family, size: 1.8, mass: 2,
       x: (Math.random()-0.5)*20, y: (Math.random()-0.5)*20, z: (Math.random()-0.5)*20, vx: 0, vy: 0, vz: 0
     });
-    linksData.push({ source: 0, target: idCounter-1, strength: 0.8, distance: 6 });
-    famCercanaIds.push(idCounter - 1);
+    linksData.push({ source: 0, target: idCounter-1, strength: 0.9, distance: 6 });
+    famIds.push(idCounter - 1);
   });
-  for(let i=0; i<famCercanaIds.length; i++){
-    for(let j=i+1; j<famCercanaIds.length; j++){
-      linksData.push({ source: famCercanaIds[i], target: famCercanaIds[j], strength: 0.4, distance: 5 });
+  // Conectar familia nuclear entre sí
+  for(let i=0; i<famIds.length; i++){
+    for(let j=i+1; j<famIds.length; j++){
+      linksData.push({ source: famIds[i], target: famIds[j], strength: 0.6, distance: 5 });
     }
   }
-  const famCercana = { start: famCercanaIds[0], end: famCercanaIds[famCercanaIds.length - 1] };
-  const famLejana = addGroup(70, 'Familia Lejana', COLORS.family, 0.8, 1, 'Físico / Presencial', 18, 0.1, 10, 0.2, 1.5);
-  for(let i=0; i<30; i++){
-    let fL = famLejana.start + Math.floor(Math.random()*(famLejana.end - famLejana.start));
-    let fC = famCercana.start + Math.floor(Math.random()*(famCercana.end - famCercana.start));
-    linksData.push({ source: fL, target: fC, strength: 0.3, distance: 8 });
-  }
+  addGroup(13, 'Familiar', COLORS.family, 1.2, 1.2, 'Presencial', 15, 0.4, 8, 0.3, 1.5, 'Tío/a');
+  addGroup(19, 'Familiar', COLORS.family, 1.1, 1.1, 'Presencial', 18, 0.3, 8, 0.25, 1.5, 'Primo/a');
 
-  // 2. Pregrado (Amigos específicos y grupo general)
-  const undergradFriends = ['Ginna', 'Germán', 'Julihet', 'Jonathan', 'Alejandra', 'Brandon'];
+
+  // GRUPO 2: PREGRADO
+  const undergradFriends = ['Ginna', 'Jonathan', 'Brandon', 'Julihet', 'Alejandra', 'Germán'];
   const startUId = idCounter;
   undergradFriends.forEach(name => {
     nodesData.push({
-      id: idCounter++, name: name, origen: 'Licenciatura en Informática', multi: 'Amistad estrecha de la carrera', env: 'Híbrido', 
-      color: COLORS.undergrad, size: 1.6, mass: 1.8,
+      id: idCounter++, name: name, origen: 'Pregrado', multi: 'Amigo Cercano', env: 'Híbrido', color: COLORS.undergrad, size: 1.6, mass: 1.8,
       x: (Math.random()-0.5)*20, y: (Math.random()-0.5)*20, z: (Math.random()-0.5)*20, vx: 0, vy: 0, vz: 0
     });
-    // Vínculo fortísimo con Ego
     linksData.push({ source: 0, target: idCounter-1, strength: 0.7, distance: 7 });
   });
-  // Vínculos entre ellos (grupo unido)
   for(let i=0; i<undergradFriends.length; i++){
     for(let j=i+1; j<undergradFriends.length; j++){
       linksData.push({ source: startUId+i, target: startUId+j, strength: 0.5, distance: 6 });
     }
   }
-  // Resto de compañeros de la carrera (genéricos)
-  const undergradGen = addGroup(12, 'Compañero Licenciatura', COLORS.undergrad, 0.9, 1.1, 'Híbrido', 16, 0.2, 9, 0.2, 2);
-  // Conectar genéricos con los amigos cercanos
-  for(let i=0; i<15; i++){
-    let specific = startUId + Math.floor(Math.random()*undergradFriends.length);
-    let generic = undergradGen.start + Math.floor(Math.random()*(undergradGen.end - undergradGen.start));
-    linksData.push({ source: specific, target: generic, strength: 0.25, distance: 10 });
-  }
-
-  // 3. Laboral (Túquerres)
-  const workCloseFriends = [
-    { name: 'Valeria', multi: 'Amistad cercana del trabajo' },
-    { name: 'Nohora', multi: 'Amistad cercana del trabajo' }
-  ];
-  const workCloseFriendIds = [];
-  workCloseFriends.forEach(person => {
-    nodesData.push({
-      id: idCounter++, name: person.name, origen: 'Trabajo', multi: person.multi, env: 'Híbrido',
-      color: COLORS.hybrid, size: 1.7, mass: 1.6,
-      x: (Math.random()-0.5)*20, y: (Math.random()-0.5)*20, z: (Math.random()-0.5)*20, vx: 0, vy: 0, vz: 0
-    });
-    linksData.push({ source: 0, target: idCounter-1, strength: 0.85, distance: 7 });
-    workCloseFriendIds.push(idCounter - 1);
-  });
-  for(let i=0; i<workCloseFriendIds.length; i++){
-    for(let j=i+1; j<workCloseFriendIds.length; j++){
-      linksData.push({ source: workCloseFriendIds[i], target: workCloseFriendIds[j], strength: 0.45, distance: 5 });
-    }
-  }
-  const workColegas = addGroup(20, 'Compañero Sede Túquerres', COLORS.work, 1.2, 1.5, 'Híbrido', 14, 0.35, 8, 0.3, 2.5);
-  const workEstudiantes = addGroup(100, 'Estudiante Sede Túquerres', COLORS.work, 0.5, 0.8, 'Físico / Presencial', 35, 0.05, 12, 0.1, 1);
-  for(let i=0; i<60; i++){
-    let est = workEstudiantes.start + Math.floor(Math.random()*(workEstudiantes.end - workEstudiantes.start));
-    let col = workColegas.start + Math.floor(Math.random()*(workColegas.end - workColegas.start));
-    linksData.push({ source: est, target: col, strength: 0.15, distance: 12 });
-  }
-
-  // 4. Académico (e-MEV) y Comunidad (Santander de Valencia)
-  const acaGroup = addGroup(15, 'Compañero Maestría e-MEV', COLORS.academic, 1, 1, 'Virtual', 22, 0.15, 12, 0.15, 2);
-  const comGroup = addGroup(100, 'Habitante Santander de Valencia', COLORS.community, 0.4, 0.7, 'Físico / Presencial', 45, 0.03, 14, 0.08, 1.2);
+  addGroup(10, 'Pregrado', COLORS.undergrad, 1.2, 1.3, 'Híbrido', 17, 0.25, 9, 0.2, 1.5, 'Docente');
+  addGroup(5, 'Pregrado', COLORS.undergrad, 1, 1.1, 'Híbrido', 19, 0.18, 10, 0.15, 1, 'Administrativo');
+  addGroup(15, 'Pregrado', COLORS.undergrad, 0.9, 1.1, 'Híbrido', 16, 0.2, 9, 0.2, 2, 'Compañero');
+  addGroup(4, 'Pregrado', COLORS.undergrad, 0.9, 1, 'Híbrido', 19, 0.15, 10, 0.15, 1, 'Personal de Apoyo');
 
 
-  // --- NODOS PUENTE (Transdisciplinariedad) ---
-  function createCrossLink(idA, idB, description, strength=0.1, dist=15) {
-    linksData.push({ source: idA, target: idB, strength: strength, distance: dist });
-    nodesData[idA].multi = description;
-    nodesData[idB].multi = description;
-  }
+  // GRUPO 3: COMUNIDAD (Santander de Valencia)
+  addGroup(35, 'Comunidad', COLORS.community, 0.7, 0.9, 'Presencial', 40, 0.05, 12, 0.1, 1, 'Vecino Santander de Valencia');
 
-  // Estudiantes que son de Santander de Valencia (Vecinos)
-  for(let i=0; i<15; i++) {
-    let studentId = workEstudiantes.start + Math.floor(Math.random()*(workEstudiantes.end - workEstudiantes.start));
-    let neighborId = comGroup.start + Math.floor(Math.random()*(comGroup.end - comGroup.start));
-    createCrossLink(studentId, neighborId, "Estudiante Túquerres y Vecino Santander de Valencia", 0.4, 8);
-    nodesData[studentId].color = COLORS.hybrid;
-    nodesData[studentId].size = 0.9;
-  }
 
-  // Colegas de Túquerres que son amigos cercanos
-  for(let i=0; i<4; i++) {
-    let coworkerId = workColegas.start + Math.floor(Math.random()*(workColegas.end - workColegas.start));
-    linksData.push({ source: 0, target: coworkerId, strength: 0.8, distance: 7 }); 
-    nodesData[coworkerId].name = "Colega Sede Túquerres → Amistad";
-    nodesData[coworkerId].multi = "Trascendió lo laboral a la amistad";
-    nodesData[coworkerId].color = COLORS.hybrid;
-    nodesData[coworkerId].size = 1.5;
-  }
+  // GRUPO 4: LAZOS DÉBILES / MENOR INTERACCIÓN
+  addGroup(10, 'Lazos Débiles', COLORS.distant, 0.9, 1, 'Mixto', 35, 0.08, 12, 0.1, 1, 'Extendido Paterno');
+  addGroup(10, 'Lazos Débiles', COLORS.distant, 0.9, 1, 'Mixto', 35, 0.08, 12, 0.1, 1, 'Extendido Materno');
+  addGroup(15, 'Lazos Débiles', COLORS.distant, 1, 1.1, 'Mixto', 35, 0.08, 10, 0.1, 1.5, 'Amistad');
+  addGroup(30, 'Lazos Débiles', COLORS.distant, 0.6, 0.7, 'Internet', 45, 0.04, 15, 0.05, 1, 'Persona en Internet');
 
-  // Familia lejana interconectada con la comunidad de Santander
-  for(let i=0; i<10; i++) {
-    let famId = famLejana.start + Math.floor(Math.random()*(famLejana.end - famLejana.start));
-    let comId = comGroup.start + Math.floor(Math.random()*(comGroup.end - comGroup.start));
-    createCrossLink(famId, comId, "Familia extendida que vive en el pueblo", 0.2, 15);
-  }
+
+  // GRUPO 5: TRABAJO (Sede Regional Túquerres)
+  addGroup(15, 'Trabajo', COLORS.work, 1.2, 1.5, 'Híbrido', 20, 0.35, 9, 0.3, 2, 'Compañero Túquerres');
+  addGroup(40, 'Trabajo', COLORS.work, 0.6, 0.8, 'Presencial', 35, 0.08, 12, 0.1, 1, 'Estudiante Túquerres');
+  addGroup(10, 'Trabajo', COLORS.work, 1.2, 1.4, 'Híbrido', 22, 0.3, 9, 0.25, 2, 'Docente Túquerres');
+  addGroup(5, 'Trabajo', COLORS.work, 1, 1.2, 'Híbrido', 25, 0.2, 10, 0.2, 1.5, 'Colaborador Administrativo');
+
+
+  // GRUPO 6: MAESTRÍA (e-MEV)
+  addGroup(15, 'Maestría', COLORS.academic, 1.1, 1.2, 'Virtual', 25, 0.2, 11, 0.2, 2, 'Compañero de Cohorte e-MEV');
+  addGroup(6, 'Maestría', COLORS.academic, 1.2, 1.3, 'Virtual', 24, 0.2, 11, 0.2, 1.5, 'Docente e-MEV');
+  addGroup(4, 'Maestría', COLORS.academic, 1, 1.1, 'Virtual', 26, 0.15, 12, 0.15, 1, 'Personal de Apoyo e-MEV');
+  addGroup(4, 'Maestría', COLORS.academic, 1, 1.1, 'Virtual', 26, 0.15, 12, 0.15, 1, 'Administrativo e-MEV');
+
 
   // --- RENDERIZACIÓN 3D ---
   const meshes = [];
@@ -492,7 +430,7 @@
 
   document.getElementById('panel-close').addEventListener('click', ()=> panel.classList.remove('open'));
 
-  // --- BUCLE DE RENDERIZADO (Sin físicas en tiempo real) ---
+  // --- BUCLE DE RENDERIZADO ---
   function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
